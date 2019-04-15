@@ -1,0 +1,170 @@
+package myproject;
+import javax.swing.*;
+
+import myproject.calculate;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class layout2 extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */ 
+	private static final long serialVersionUID = 1L;
+	//static JFrame frm = new JFrame("四则运算");
+	FlowLayout flow = new FlowLayout(FlowLayout.LEFT,10,10);
+	JButton but = new JButton("开始");
+	JButton but1 = new JButton("我做完啦要对答案");
+	JButton but2 = new JButton("将做题情况保存为文档");
+	JLabel lab = new JLabel("这里输入题目数量：");
+	JLabel lab1 = new JLabel("———请将答案写在等式后———");
+	JLabel lab2 = new JLabel("———答案显示区———");
+	JTextField tf = new JTextField(3); 
+	JTextArea ta = new JTextArea(23,12);
+	JTextArea ta1 = new JTextArea(23,8);
+	JScrollPane jsp = new JScrollPane(ta);
+	JScrollPane jsp1 = new JScrollPane(ta1);
+	
+	public layout2()
+	{
+		Font font = new Font("微软雅黑",Font.PLAIN, 18);
+		this.setLocation(400, 90);
+		this.setTitle("四则运算出题神器");
+		this.setLayout(flow);
+		this.setSize(400, 740);
+//		jsp.setBounds(20,70,400,90);
+		this.add(lab);
+		this.add(tf);
+		this.add(but);
+		this.add(lab1);
+		this.add(lab2);
+		this.add(jsp);
+		this.add(jsp1);
+		this.add(but1);
+		this.add(but2);
+		this.setResizable(false);
+		but.addActionListener(this);
+		ta.setFont(font);
+		ta1.setFont(font);
+		lab.setFont(font);
+		tf.setFont(font);
+		but1.setForeground(Color.white);
+		but1.setBackground(Color.pink); 
+		but.setForeground(Color.white);
+		but.setBackground(Color.pink);
+		but2.setForeground(Color.white);
+		but2.setBackground(Color.pink);
+		but1.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						FileReader fr = null;
+						try {
+							fr = new FileReader("f:\\java\\temp.txt");
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						char[] c = new char[9999];
+						int num = 0;
+						try {
+							num = fr.read(c);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						String str = new String(c,0,num);
+						ta1.setText(str);
+					}
+				});
+		but2.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_MM_SS");
+						sdf.setLenient(false);
+						String fileName = sdf.format(new Date())+"file.txt";
+						File file = new File("f:\\java\\"+fileName);
+						try {
+							file.createNewFile();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						FileWriter fw = null;
+						try {
+							fw = new FileWriter(file);
+							String s3 = ta.getText();
+							String s4 = ta1.getText();
+							fw.write(s3+s4);
+							fw.flush();
+							fw.close();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				});
+	}
+	public void actionPerformed(ActionEvent e)
+	{
+		FileWriter fw = null;
+		FileWriter fs = null;
+		try {
+			fw = new FileWriter("f:\\java\\test.txt");
+			fs = new FileWriter("f:\\java\\temp.txt");
+		} catch (IOException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		String s0 = "我的题目:\r\n";
+		String s1 = "";
+		try {
+			fw.write(s0);
+			fs.write(s1);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			fs.close();
+			fw.close();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		ta.setText("");
+		String s = tf.getText();
+		int  n  = Integer.valueOf(s);
+		if(n<=1)
+		{
+			JOptionPane.showConfirmDialog(this, "请输入大于0的整数","提示",JOptionPane.YES_NO_OPTION);
+		}
+		calculate ca = new calculate();
+		for(int i=1;i<=n;i++)
+		{
+			try {
+				ta.append(i+":"+"  ");
+				ta.append(ca.cal());
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+	}
+	public static void main(String[] args)
+	{
+		layout2 la = new layout2();
+		la.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		la.setVisible(true);
+	}
+}
