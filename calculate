@@ -1,0 +1,229 @@
+package myproject;
+import java.util.*;
+import java.io.*;
+
+public class calculate {
+	private FileWriter fw;
+	private FileWriter fs;
+	static int calcul(int a,int b,int c)
+	{
+		switch(c)
+		{ 
+			case 0: 
+				return a+b;
+				//break;
+			case 1: 
+				return a-b;
+				//break;
+			case 2: 
+				return a*b;
+				//break;
+			case 3: return a/b;
+					//break;
+		}
+		return 0;
+	}
+
+	static int divi(int a)
+	{
+		if(a==0||a==1) return 1;
+		else
+		{
+			int i;
+			for(i=2;i<=a;i++)
+			{
+				if(a%i==0)
+				{
+					 return i;
+				 }
+			}
+		}
+		return 1;
+	}
+	public String cal() throws IOException
+	{
+		boolean flag = true;
+		while(flag)
+		{
+		fw = new FileWriter("f:\\java\\test.txt",true);
+		fs = new FileWriter("f:\\java\\temp.txt",true);
+		int a,b,c,x,y,t,f,te;
+		char p,q;
+		int k = 0; 
+		String s,s1; 
+		Random r =new Random();
+			a = r.nextInt(100);
+			b = r.nextInt(100);
+			c = r.nextInt(100);
+			x = r.nextInt(4);
+			y = r.nextInt(4);;
+			f = r.nextInt(2);; 
+			if(x==0) p = '+';
+			else if(x==1) p = '-';
+			else if(x==2) p = '*';
+			else p = '/'; 
+			if(y==0) q = '+';
+			else if(y==1) q = '-';
+			else if(y==2) q = '*';
+			else q = '/';
+			if(x<2&&y<2)
+			{
+				if(a<b&&x==1)
+				{
+					t=a;
+					a=b;
+					b=t;
+				}
+				t = calcul(a,b,x);
+				if(t==0&&y==1)
+				{
+					c = 0;
+				}
+				if(t<c&&y==1&&t!=0)
+				{
+					c = divi(t);
+				}
+				k = calcul(t,c,y);
+			}
+			if(x>=2&&y>=2)
+			{
+				while(x==3&&b==0)
+				{
+					b = r.nextInt(100);
+				}
+				while(y==3&&c==0)
+				{
+					c = r.nextInt(100);
+				}
+				if(x==3&&y!=3)
+				{
+					t = a/b;
+					a = t*b;	
+				}
+				if(x==3&&y==3)
+				{
+					b = divi(a);
+					c = divi(b);
+				}
+				if(x!=3&&y==3)
+				{
+					c = divi(a);
+				}
+				t = calcul(a,b,x);
+				k = calcul(t,c,y);
+			}
+			if(x<2 && y>=2 && f==1)
+			{
+				if(y==2)
+				{
+					c = r.nextInt(2);
+				}
+				if(a<b&&x==1)
+				{
+					t=a;
+					a=b;
+					b=t;
+				 }
+				while(y==3&&c==0)
+				{
+					c = r.nextInt(100);
+				}
+				t = calcul(a,b,x);
+				if(y==3&&t%c!=0)
+				{
+					c=divi(t);
+				}
+				k = calcul(t,c,y); 
+				if(k<=100)
+				{
+				s = ""+"("+a+p+b+")"+q+c+"="+"\n";
+				s1 = ""+"("+a+p+b+")"+q+c+"="+"\r\n";
+				fw.write(s1);
+				fs.write(k+"\r\n");
+				fs.close();
+				fw.close();
+				flag = false;
+				return s;
+			}
+			}
+			if(x<2&&y>=2&&f==0)
+			{
+				while(y==3&&c==0)
+				{
+					c = r.nextInt(50);
+				}
+				if(y==3&&b%c!=0)
+				{
+					t = b/c;
+					b = t*c;
+				}
+				t = calcul(b,c,y);
+				if(a<t&&x==1)
+				{
+					a = a+t;
+				}
+				k = calcul(a,t,x);
+			}
+			if(x>=2&&y<2&&f==1)
+			{
+				while(b<=c&&y==1)
+				{
+					b = r.nextInt(50);
+					c = r.nextInt(50);
+				}
+				t = calcul(b,c,y);
+				if(x==3&&a%t!=0)
+				{
+					te = r.nextInt(2);
+					a = te*t;
+				}
+				k = calcul(a,t,x);
+				if(k<=100)
+				{
+				s = ""+a+p+"("+b+q+c+")"+"="+"\n";
+				s1 = ""+a+p+"("+b+q+c+")"+"="+"\r\n";
+				fw.write(s1);
+				fs.write(k+"\r\n");
+				fs.close();
+				fw.close(); 
+				flag = false;
+				return s;
+				}
+			}
+			if(x>=2&&y<2&&f==0)
+			{
+				while(x==3&&b==0)
+				{
+					b = r.nextInt(50);
+				}
+				if(x==3&&a%b!=0)
+				{
+					t = a/b;
+					a = t*b;
+				}
+				t = calcul(a,b,x);
+				if(t<c&&y==1&&t!=0)
+				{
+					c = c%t;
+				}
+				if(t<c&&y==1&&t==0)
+				{
+					c=0;
+				}
+				k = calcul(t,c,y);
+			}
+			if(k<=100)
+			{
+			 s = ""+a+p+b+q+c+"="+"\n";
+			 s1 = ""+a+p+b+q+c+"="+"\r\n";
+			 fw.write(s1);
+			 fs.write(k+"\r\n");
+			 fs.close();
+			 fw.close();
+			 flag = false;
+			 return s;
+			}
+		}
+		return null;
+	}
+}
